@@ -17,5 +17,6 @@ const text = "Hello, Obsidian!";
 
 const command = `${uri}new?vault=${encodeURIComponent(vault)}&file=${encodeURIComponent(filePath)}&content=${encodeURIComponent(text)}`;
 
-
-window.open(command);
+export function add(params) {
+    console.log("Add function called with params");
+}
