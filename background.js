@@ -7,7 +7,7 @@ browser.commands.onCommand.addListener((command) => {
             //    url: "https://www.youtube.com/watch?v=WiLu-2GbkFg"
             //});
             browser.tabs.executeScript({
-                file: 'add_note.js'
+                file: 'script.js'
             });
             break;
     }
