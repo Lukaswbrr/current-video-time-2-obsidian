@@ -36,8 +36,9 @@ function formatTime(timeInSeconds) {
   return `${minutes}:${formattedSeconds}`;
 }
 
-
+console.log("Script loaded.");
 let time = document.getElementsByTagName('video')[0].currentTime;
+
 let formattedTime = formatTime(time);
 
 let command = `${uri}new?vault=${encodeURIComponent(vault)}&file=${encodeURIComponent(filePath)}&content=${encodeURIComponent(formattedTime)}&append=true`;
