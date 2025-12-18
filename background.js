@@ -8,7 +8,6 @@ browser.commands.onCommand.addListener((command) => {
             //});
             browser.tabs.executeScript({
                 file: 'script.js',
-                allFrames: true
             });
             break;
     }

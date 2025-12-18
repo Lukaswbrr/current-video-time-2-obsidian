@@ -37,20 +37,38 @@ function formatTime(timeInSeconds) {
 }
 
 console.log("Script loaded.");
-let time = document.getElementsByTagName('video')[0].currentTime;
 
-let formattedTime = formatTime(time);
+function findVideo() {
+  // Prefer YouTube main video, fallback to any <video>
+  return document.getElementsByTagName("video");
+}
 
-let command = `${uri}new?vault=${encodeURIComponent(vault)}&file=${encodeURIComponent(filePath)}&content=${encodeURIComponent(formattedTime)}&append=true`;
+function waitForVideo(timeoutMs = 8000) {
+  const v = findVideo();
+  if (v) return Promise.resolve(v);
+  return new Promise((resolve, reject) => {
+    const obs = new MutationObserver(() => {
+      const v2 = findVideo();
+      if (v2) { obs.disconnect(); resolve(v2); }
+    });
+    obs.observe(document.documentElement, { childList: true, subtree: true });
+    setTimeout(() => { obs.disconnect(); reject(new Error("No video found")); }, timeoutMs);
+  });
+}
 
-const win = window.open(command);
-
-win.close();
-/*
-setTimeout(() => {
+(async () => {
   try {
-    if (win && !win.closed) win.close();
-  } catch (e) {}
-}, 300);
-*/
+    const video = await waitForVideo();
+    console.log("Found video:", video);
+    const time = video.currentTime;
+    const formattedTime = formatTime(time);
+
+    let command = `${uri}new?vault=${encodeURIComponent(vault)}&file=${encodeURIComponent(filePath)}&content=${encodeURIComponent(formattedTime)}&append=true`;
+    const win = window.open(command, "_blank");
+    setTimeout(() => { try { if (win && !win.closed) win.close(); } catch {} }, 700);
+  } catch (e) {
+    console.warn("Video not found:", e);
+  }
+})();
+
 }
